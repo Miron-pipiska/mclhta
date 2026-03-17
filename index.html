@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Captcha</title>
+
+<style>
+body {
+    background: #111;
+    color: white;
+    font-family: Arial;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.box {
+    background: #222;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    width: 300px;
+}
+
+/* Слайдер */
+.slider-container {
+    margin-top: 20px;
+}
+
+input[type=range] {
+    width: 100%;
+}
+
+.hidden {
+    display: none;
+}
+
+button {
+    margin-top: 10px;
+    padding: 8px 15px;
+    border-radius: 8px;
+    border: none;
+    background: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+</style>
+
+</head>
+<body>
+
+<div class="box">
+
+    <h3>Подтверждение</h3>
+
+    <!-- Шаг 1 -->
+    <div id="sliderBlock">
+        <p>Проведите ползунок →</p>
+        <input type="range" id="slider" min="0" max="100" value="0">
+    </div>
+
+    <!-- Шаг 2 -->
+    <div id="captchaBlock" class="hidden">
+        <p id="question"></p>
+        <input type="number" id="answer" placeholder="Ответ">
+        <br>
+        <button onclick="checkCaptcha()">Проверить</button>
+    </div>
+
+    <!-- Шаг 3 -->
+    <div id="success" class="hidden">
+        <h2>✅ Вы не робот</h2>
+    </div>
+
+</div>
+
+<script>
+let slider = document.getElementById("slider");
+let captchaBlock = document.getElementById("captchaBlock");
+let sliderBlock = document.getElementById("sliderBlock");
+
+let a, b, correct;
+
+// Слайдер
+slider.addEventListener("input", function() {
+    if (slider.value == 100) {
+        sliderBlock.classList.add("hidden");
+        startCaptcha();
+    }
+});
+
+// Генерация капчи
+function startCaptcha() {
+    captchaBlock.classList.remove("hidden");
+
+    a = Math.floor(Math.random() * 10);
+    b = Math.floor(Math.random() * 10);
+    correct = a + b;
+
+    document.getElementById("question").innerText = a + " + " + b + " = ?";
+}
+
+// Проверка
+function checkCaptcha() {
+    let user = document.getElementById("answer").value;
+
+    if (parseInt(user) === correct) {
+        captchaBlock.classList.add("hidden");
+        document.getElementById("success").classList.remove("hidden");
+    } else {
+        alert("Неверно, попробуй ещё!");
+    }
+}
+</script>
+
+</body>
+</html>
